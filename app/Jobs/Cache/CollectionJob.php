@@ -17,7 +17,9 @@ final class CollectionJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public string $key;
+
     public LengthAwarePaginator|Collection $collection;
+
     private array $config;
 
     public function __construct(string $key, Collection|LengthAwarePaginator $collection)
@@ -29,10 +31,10 @@ final class CollectionJob implements ShouldQueue
 
     public function handle(): void
     {
-        Cache::put($this->key, $this->collection, $this->config['cache_timeout'] );
+        Cache::put($this->key, $this->collection, $this->config['cache_timeout']);
 
-        $this->collection->each(function(Model $model){
-            Cache::put($model->getTable().':id'. $model->id, $model, $this->config['cache_timeout']);
+        $this->collection->each(static function (Model $model) {
+            ModelJob::dispatch($model);
         });
     }
 }

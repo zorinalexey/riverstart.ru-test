@@ -58,7 +58,7 @@ final class ProductService extends CRUDService implements ProductServiceInterfac
             }
 
             DB::commit();
-            ModelJob::dispatch($this->cacheKey.':'.$product->id, $product);
+            ModelJob::dispatch($product);
 
             return $product;
         }
@@ -94,7 +94,7 @@ final class ProductService extends CRUDService implements ProductServiceInterfac
             }
 
             DB::commit();
-            ModelJob::dispatch($this->cacheKey.':'.$getProduct->id, $getProduct);
+            ModelJob::dispatch($getProduct);
 
             return $getProduct;
         }

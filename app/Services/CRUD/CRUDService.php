@@ -44,23 +44,28 @@ abstract class CRUDService implements CRUDServiceInterface
             $key .= ':'.md5(serialize($filterData));
         }
 
-        $perPage = request()->get($this->config['per_page_name'], $this->config['count_page_elements']);
+        $collection = Cache::remember($key, $this->config['cache_timeout'], function () use ($filterData) {
 
-        if (isset(static::$filter) && $filterClass = static::$filter) {
-            /** @var AbstractFilter $filter */
-            $filter = app()->make($filterClass, ['queryParams' => array_filter($filterData)]);
-            $collectionBuilder = static::$model::filter($filter);
-        } else {
-            $collectionBuilder = static::$model::query();
-        }
+            $perPage = request()->get($this->config['per_page_name'], $this->config['count_page_elements']);
 
-        if (is_numeric($perPage)) {
-            $collection = $collectionBuilder->paginate($perPage);
-        } elseif (is_string($perPage) && mb_strtolower($perPage) === $this->config['get_all_elements_var_value']) {
-            $collection = $collectionBuilder->get();
-        } else {
-            $collection = $collectionBuilder->paginate();
-        }
+            if (isset(static::$filter) && $filterClass = static::$filter) {
+                /** @var AbstractFilter $filter */
+                $filter = app()->make($filterClass, ['queryParams' => array_filter($filterData)]);
+                $collectionBuilder = static::$model::filter($filter);
+            } else {
+                $collectionBuilder = static::$model::query();
+            }
+
+            if (is_numeric($perPage)) {
+                return $collectionBuilder->paginate($perPage);
+            }
+
+            if (is_string($perPage) && mb_strtolower($perPage) === $this->config['get_all_elements_var_value']) {
+                return $collectionBuilder->get();
+            }
+
+            return $collectionBuilder->paginate();
+        });
 
         if ($collection->count() > 0) {
             CollectionJob::dispatch($key, $collection);
@@ -79,7 +84,7 @@ abstract class CRUDService implements CRUDServiceInterface
 
         /** @var Model $getModel */
         if ($getModel = static::$model::query()->create($data)) {
-            ModelJob::dispatch($this->cacheKey.':'.$getModel->id, $getModel);
+            ModelJob::dispatch( $getModel);
 
             return $getModel;
         }
@@ -97,7 +102,7 @@ abstract class CRUDService implements CRUDServiceInterface
         }
 
         if (($getModel = $this->view($model)) && $getModel->update($data)) {
-            ModelJob::dispatch($this->cacheKey.':'.$model, $getModel);
+            ModelJob::dispatch($getModel);
 
             return $getModel;
         }
@@ -110,21 +115,25 @@ abstract class CRUDService implements CRUDServiceInterface
 
     final public function view(int|string $model): Model
     {
-        $getModel = false;
+        $key = $this->cacheKey.':'.$model;
+        $getModel = Cache::remember($key, $this->config['cache_timeout'], function () use ($model) {
+            if (is_numeric($model)) {
+                return static::$model::query()->find($model);
+            }
+            if (method_exists($this, 'setAlias')) {
+                return static::$model::query()->where('alias',
+                    Str::slug(
+                        str_replace($this->config['alias_separator'], ' ', $model),
+                        $this->config['alias_separator']
+                    )
+                )->first();
+            }
 
-        if (is_numeric($model)) {
-            $getModel = static::$model::query()->find($model);
-        } elseif (method_exists($this, 'setAlias')) {
-            $getModel = static::$model::query()->where('alias',
-                Str::slug(
-                    str_replace($this->config['alias_separator'], ' ', $model),
-                    $this->config['alias_separator']
-                )
-            )->first();
-        }
+            return false;
+        });
 
         if ($getModel) {
-            ModelJob::dispatch($this->cacheKey.':'.$model, $getModel);
+            ModelJob::dispatch($getModel);
 
             return $getModel;
         }

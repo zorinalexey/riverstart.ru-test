@@ -14,16 +14,15 @@ final class ModelJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public string $key;
     public Model $model;
+
     public array $config;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(string $key, Model $model)
+    public function __construct(Model $model)
     {
-        $this->key = $key;
         $this->model = $model;
         $this->config = config('crud-service');
     }
@@ -33,6 +32,14 @@ final class ModelJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Cache::put($this->model->getTable().':id'. $this->model->id, $this->model, $this->config['cache_timeout']);
+        Cache::put($this->model->getTable().':'.$this->model->id, $this->model, $this->config['cache_timeout']);
+
+        if(isset($this->model->name)){
+            Cache::put($this->model->getTable().':'.$this->model->name, $this->model, $this->config['cache_timeout']);
+        }
+
+        if(isset($this->model->name)){
+            Cache::put($this->model->getTable().':'.$this->model->name, $this->model, $this->config['cache_timeout']);
+        }
     }
 }
