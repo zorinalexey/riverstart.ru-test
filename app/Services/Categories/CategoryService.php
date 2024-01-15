@@ -7,7 +7,6 @@ use App\Filters\CategoryFilter;
 use App\Models\Category;
 use App\Services\CRUD\CRUDService;
 use App\Utils\Traits\Aliasable;
-use Illuminate\Database\Eloquent\Model;
 
 final class CategoryService extends CRUDService implements CategoryServiceInterface
 {

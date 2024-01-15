@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\CRUD\CRUDService;
 use App\Utils\Traits\Aliasable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 final class UserService extends CRUDService implements UserServiceInterface
 {
@@ -21,6 +22,8 @@ final class UserService extends CRUDService implements UserServiceInterface
 
     protected static string $exception = UserException::class;
 
+    protected static string $langPathName = 'users';
+
     public function __construct()
     {
         parent::__construct();
@@ -29,11 +32,23 @@ final class UserService extends CRUDService implements UserServiceInterface
 
     public function login(array $data): User|Model
     {
-        // TODO: Implement login() method.
+        if (Auth::attempt($data)) {
+            request()->session()->regenerate();
+
+            return Auth::user();
+        }
+
+        throw new self::$exception(trans('users.auth.error'));
     }
 
-    public function logOut(): void
+    public function logOut(): bool
     {
-        // TODO: Implement logOut() method.
+        Auth::logout();
+
+        if (! Auth::check()) {
+            return true;
+        }
+
+        return false;
     }
 }

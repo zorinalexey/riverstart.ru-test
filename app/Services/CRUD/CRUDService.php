@@ -16,22 +16,32 @@ use Illuminate\Support\Str;
 abstract class CRUDService implements CRUDServiceInterface
 {
     protected static string $exception = CRUDException::class;
+
     protected static string $langPathName = 'crud';
+
     protected string $cacheKey = 'crud';
+
     protected readonly array $config;
 
+    /**
+     * @throws CRUDException
+     */
     public function __construct()
     {
+        if (! isset(static::$model)) {
+            throw new CRUDException(trans('crud.model_not_defined'), ErrorCodeEnum::ERROR_OTHER);
+        }
+
         $this->config = config('crud-service');
     }
 
     final public function list(array $filterData): Collection|LengthAwarePaginator
     {
         $page = request()->get($this->config['current_page_name'], 1);
-        $key = $this->cacheKey . ':' . $this->config['current_page_name'] . ':' . $page;
+        $key = $this->cacheKey.':'.$this->config['current_page_name'].':'.$page;
 
         if ($filterData) {
-            $key .= ':' . md5(serialize($filterData));
+            $key .= ':'.md5(serialize($filterData));
         }
 
         $perPage = request()->get($this->config['per_page_name'], $this->config['count_page_elements']);
@@ -54,10 +64,11 @@ abstract class CRUDService implements CRUDServiceInterface
 
         if ($collection->count() > 0) {
             CollectionJob::dispatch($key, $collection);
+
             return $collection;
         }
 
-        throw new static::$exception(trans(static::$langPathName . '.view.empty_list'), ErrorCodeEnum::ERROR_VIEW_RECORD);
+        throw new static::$exception(trans(static::$langPathName.'.view.empty_list'), ErrorCodeEnum::ERROR_VIEW_RECORD);
     }
 
     public function create(array $data): Model
@@ -68,7 +79,7 @@ abstract class CRUDService implements CRUDServiceInterface
 
         /** @var Model $getModel */
         if ($getModel = static::$model::query()->create($data)) {
-            ModelJob::dispatch($this->cacheKey . ':' . $getModel->id, $getModel);
+            ModelJob::dispatch($this->cacheKey.':'.$getModel->id, $getModel);
 
             return $getModel;
         }
@@ -86,13 +97,13 @@ abstract class CRUDService implements CRUDServiceInterface
         }
 
         if (($getModel = $this->view($model)) && $getModel->update($data)) {
-            ModelJob::dispatch($this->cacheKey . ':' . $model, $getModel);
+            ModelJob::dispatch($this->cacheKey.':'.$model, $getModel);
 
             return $getModel;
         }
 
         throw new static::$exception(
-            trans(static::$langPathName . '.update.error', ['id' => $model]),
+            trans(static::$langPathName.'.update.error', ['id' => $model]),
             ErrorCodeEnum::ERROR_UPDATE_RECORD
         );
     }
@@ -113,12 +124,13 @@ abstract class CRUDService implements CRUDServiceInterface
         }
 
         if ($getModel) {
-            ModelJob::dispatch($this->cacheKey . ':' . $model, $getModel);
+            ModelJob::dispatch($this->cacheKey.':'.$model, $getModel);
+
             return $getModel;
         }
 
         throw new static::$exception(
-            trans(static::$langPathName . '.view.not_found', ['id' => $model]),
+            trans(static::$langPathName.'.view.not_found', ['id' => $model]),
             ErrorCodeEnum::ERROR_VIEW_RECORD
         );
     }
@@ -126,13 +138,13 @@ abstract class CRUDService implements CRUDServiceInterface
     final public function delete(int|string $model): bool
     {
         if (($getModel = $this->view($model)) && $getModel->delete()) {
-            Cache::forget($this->cacheKey . ':' . $model);
+            Cache::forget($this->cacheKey.':'.$model);
 
             return true;
         }
 
         throw new static::$exception(
-            trans(static::$langPathName . '.delete.error', [':id' => $model]),
+            trans(static::$langPathName.'.delete.error', [':id' => $model]),
             ErrorCodeEnum::ERROR_DELETE_RECORD
         );
     }

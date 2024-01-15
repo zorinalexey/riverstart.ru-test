@@ -18,5 +18,5 @@ interface UserServiceInterface extends CRUDServiceInterface
 
     public function login(array $data): User|Model;
 
-    public function logOut(): void;
+    public function logOut(): bool;
 }

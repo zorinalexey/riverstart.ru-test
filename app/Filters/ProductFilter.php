@@ -25,7 +25,7 @@ final class ProductFilter extends AbstractFilter
 
     public function __construct(array $queryParams)
     {
-        if (!in_array('sort', $queryParams, true)) {
+        if (! in_array('sort', $queryParams, true)) {
             $queryParams['sort']['id'] = 'desc';
         }
 
