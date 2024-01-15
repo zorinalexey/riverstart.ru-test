@@ -29,7 +29,6 @@ abstract class AbstractApiV1CRUDController extends AbstractApiController
 
     }
 
-    //($this->service, $category, 'categories')
     final public function view(CRUDServiceInterface $service, string|int $model, string $modelName): JsonResponse
     {
 
