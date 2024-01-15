@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 
 final class ProductService implements ProductServiceInterface
 {
-
     public function list(array $filterData): Collection|LengthAwarePaginator|null
     {
         // TODO: Implement list() method.

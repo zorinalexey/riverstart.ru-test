@@ -7,13 +7,13 @@ use Illuminate\Support\Str;
 
 final class CategoryFactory extends Factory
 {
-    private static array|null $crud_config = null;
+    private static ?array $crud_config = null;
 
     public function __construct()
     {
         parent::__construct();
 
-        if(!self::$crud_config){
+        if (! self::$crud_config) {
             self::$crud_config = config('crud-service');
         }
     }
