@@ -2,39 +2,29 @@
 
 namespace App\Services\Users;
 
+use App\Exceptions\UserException;
+use App\Filters\UserFilter;
 use App\Models\User;
+use App\Services\CRUD\CRUDService;
 use App\Utils\Traits\Aliasable;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-final class UserService implements UserServiceInterface
+final class UserService extends CRUDService implements UserServiceInterface
 {
     use Aliasable;
 
-    public function list(array $filterData): Collection|LengthAwarePaginator|null
-    {
-        // TODO: Implement list() method.
-    }
+    protected static string $model = User::class;
 
-    public function view(int|string $user): User|Model
-    {
-        // TODO: Implement view() method.
-    }
+    protected string $cacheKey;
 
-    public function create(array $data): User|Model
-    {
-        // TODO: Implement create() method.
-    }
+    protected static string $filter = UserFilter::class;
 
-    public function update(array $data, int|string $user): User|Model
-    {
-        // TODO: Implement update() method.
-    }
+    protected static string $exception = UserException::class;
 
-    public function delete(int|string $user): bool
+    public function __construct()
     {
-        // TODO: Implement delete() method.
+        parent::__construct();
+        $this->cacheKey = (new User())->getTable();
     }
 
     public function login(array $data): User|Model

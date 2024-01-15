@@ -2,24 +2,29 @@
 
 namespace App\Services\Products;
 
+use App\Exceptions\ProductException;
+use App\Filters\CategoryFilter;
 use App\Models\Product;
+use App\Services\CRUD\CRUDService;
 use App\Utils\Traits\Aliasable;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-final class ProductService implements ProductServiceInterface
+final class ProductService extends CRUDService implements ProductServiceInterface
 {
     use Aliasable;
 
-    public function list(array $filterData): Collection|LengthAwarePaginator|null
-    {
-        // TODO: Implement list() method.
-    }
+    protected static string $model = Product::class;
 
-    public function view(int|string $product): Product|Model
+    protected static string $filter = CategoryFilter::class;
+
+    protected static string $exception = ProductException::class;
+
+    protected string $cacheKey;
+
+    public function __construct()
     {
-        // TODO: Implement view() method.
+        parent::__construct();
+        $this->cacheKey = (new Product())->getTable();
     }
 
     public function create(array $data): Product|Model
@@ -30,10 +35,5 @@ final class ProductService implements ProductServiceInterface
     public function update(array $data, int|string $product): Product|Model
     {
         // TODO: Implement update() method.
-    }
-
-    public function delete(int|string $product): bool
-    {
-        // TODO: Implement delete() method.
     }
 }

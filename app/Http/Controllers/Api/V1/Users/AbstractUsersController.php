@@ -8,6 +8,8 @@ use App\Services\Users\UserServiceInterface;
 
 abstract class AbstractUsersController extends AbstractApiV1Controller
 {
+    protected readonly string $resource;
+
     final public function __construct(
         protected readonly UserServiceInterface $service
     ) {

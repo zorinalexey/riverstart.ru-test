@@ -3,7 +3,7 @@
 namespace App\Services\Products;
 
 use App\Models\Product;
-use App\Services\CRUDServiceInterface;
+use App\Services\CRUD\CRUDServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
 interface ProductServiceInterface extends CRUDServiceInterface

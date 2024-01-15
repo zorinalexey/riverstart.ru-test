@@ -3,7 +3,7 @@
 namespace App\Services\Users;
 
 use App\Models\User;
-use App\Services\CRUDServiceInterface;
+use App\Services\CRUD\CRUDServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
 interface UserServiceInterface extends CRUDServiceInterface

@@ -3,7 +3,7 @@
 namespace App\Services\Categories;
 
 use App\Models\Category;
-use App\Services\CRUDServiceInterface;
+use App\Services\CRUD\CRUDServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
 interface CategoryServiceInterface extends CRUDServiceInterface

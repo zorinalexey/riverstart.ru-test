@@ -2,38 +2,30 @@
 
 namespace App\Services\Categories;
 
+use App\Exceptions\CategoryException;
+use App\Filters\CategoryFilter;
 use App\Models\Category;
+use App\Services\CRUD\CRUDService;
 use App\Utils\Traits\Aliasable;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-final class CategoryService implements CategoryServiceInterface
+final class CategoryService extends CRUDService implements CategoryServiceInterface
 {
     use Aliasable;
 
-    public function list(array $filterData): Collection|LengthAwarePaginator|null
-    {
-        // TODO: Implement list() method.
-    }
+    protected static string $model = Category::class;
 
-    public function view(int|string $category): Category|Model
-    {
-        // TODO: Implement view() method.
-    }
+    protected string $cacheKey;
 
-    public function create(array $data): Category|Model
-    {
-        // TODO: Implement create() method.
-    }
+    protected static string $filter = CategoryFilter::class;
 
-    public function update(array $data, int|string $category): Category|Model
-    {
-        // TODO: Implement update() method.
-    }
+    protected static string $exception = CategoryException::class;
 
-    public function delete(int|string $category): bool
+    protected static string $langPathName = 'categories';
+
+    public function __construct()
     {
-        // TODO: Implement delete() method.
+        parent::__construct();
+        $this->cacheKey = (new Category())->getTable();
     }
 }

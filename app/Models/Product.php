@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 final class Product extends Model
 {
-    use HasFactory, SoftDeletes, Filterable;
+    use Filterable, HasFactory, SoftDeletes;
 
     protected $guarded = [];
 

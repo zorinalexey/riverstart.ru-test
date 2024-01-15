@@ -8,7 +8,7 @@ use App\Services\Categories\CategoryServiceInterface;
 
 abstract class AbstractCategoriesController extends AbstractApiV1Controller
 {
-    protected string $resource;
+    protected readonly string $resource;
 
     final public function __construct(
         protected readonly CategoryServiceInterface $service

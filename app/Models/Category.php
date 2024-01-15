@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 final class Category extends Model
 {
-    use HasFactory, Filterable;
+    use Filterable, HasFactory;
 
     protected $guarded = [];
 

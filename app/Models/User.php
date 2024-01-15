@@ -15,7 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 final class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Filterable;
+    use Filterable, HasApiTokens, HasFactory, Notifiable;
 
     protected $guarded = [];
 
