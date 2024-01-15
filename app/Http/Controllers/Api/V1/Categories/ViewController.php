@@ -8,6 +8,6 @@ final class ViewController extends AbstractCategoriesController
 {
     public function __invoke(string|int $category): JsonResponse
     {
-        return $this->view($this->service, $category, 'categories');
+        return $this->view($category);
     }
 }

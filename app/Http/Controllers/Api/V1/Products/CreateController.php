@@ -9,6 +9,6 @@ final class CreateController extends AbstractProductsController
 {
     public function __invoke(CreateRequest $request): JsonResponse
     {
-        return $this->create($this->service, $request, 'products');
+        return $this->create($request, 'products');
     }
 }

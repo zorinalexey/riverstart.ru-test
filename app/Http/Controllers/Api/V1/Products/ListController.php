@@ -9,6 +9,6 @@ final class ListController extends AbstractProductsController
 {
     public function __invoke(FilterRequest $request): JsonResponse
     {
-        return $this->list($this->service, $request, 'products');
+        return $this->list($request);
     }
 }

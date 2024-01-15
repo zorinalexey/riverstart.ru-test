@@ -9,6 +9,6 @@ final class CreateController extends AbstractUsersController
 {
     public function __invoke(CreateRequest $request): JsonResponse
     {
-        return $this->create($this->service, $request, 'users');
+        return $this->create($request, 'users');
     }
 }

@@ -9,6 +9,6 @@ final class UpdateController extends AbstractProductsController
 {
     public function __invoke(UpdateRequest $request, string|int $product): JsonResponse
     {
-        return $this->update($this->service, $request, $product, 'products');
+        return $this->update($request, $product, 'products');
     }
 }

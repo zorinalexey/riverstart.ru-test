@@ -8,6 +8,6 @@ final class DeleteController extends AbstractUsersController
 {
     public function __invoke(string|int $user): JsonResponse
     {
-        return $this->delete($this->service, $user, 'users');
+        return $this->delete($user, 'users');
     }
 }

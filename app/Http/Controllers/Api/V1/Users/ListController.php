@@ -9,6 +9,6 @@ final class ListController extends AbstractUsersController
 {
     public function __invoke(FilterRequest $request): JsonResponse
     {
-        return $this->list($this->service, $request, 'users');
+        return $this->list($request);
     }
 }

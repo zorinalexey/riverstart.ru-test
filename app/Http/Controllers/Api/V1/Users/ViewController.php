@@ -8,6 +8,6 @@ final class ViewController extends AbstractUsersController
 {
     public function __invoke(string|int $user): JsonResponse
     {
-        return $this->view($this->service, $user, 'users');
+        return $this->view($user);
     }
 }

@@ -9,6 +9,6 @@ final class UpdateController extends AbstractCategoriesController
 {
     public function __invoke(UpdateRequest $request, string|int $category): JsonResponse
     {
-        return $this->update($this->service, $request, $category, 'categories');
+        return $this->update($request, $category, 'categories');
     }
 }

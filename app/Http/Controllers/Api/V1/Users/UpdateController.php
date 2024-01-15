@@ -9,6 +9,6 @@ final class UpdateController extends AbstractUsersController
 {
     public function __invoke(UpdateRequest $request, string|int $user): JsonResponse
     {
-        return $this->update($this->service, $request, $user, 'users');
+        return $this->update($request, $user, 'users');
     }
 }
