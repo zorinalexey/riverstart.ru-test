@@ -10,7 +10,7 @@ final class LogoutController extends AbstractUsersController
 {
     public function __invoke(): JsonResponse
     {
-        if($this->service->logOut()){
+        if ($this->service->logOut()) {
             return new SuccessResponse(body: [
                 'message' => trans('users.success.logout'),
             ]);

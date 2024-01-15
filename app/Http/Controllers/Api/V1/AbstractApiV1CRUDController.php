@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\Log;
 
 abstract class AbstractApiV1CRUDController extends AbstractApiController
 {
-    final public function create(FormRequest $request, string $langPathName): JsonResponse
+    final public function create(FormRequest $request, string $langPathName, string $resourceClass): JsonResponse
     {
         try {
             $category = $this->service->create($request->validated());
-            /** @var JsonResource $tihs->resource */
+            /** @var JsonResource $resourceClass */
 
             return new SuccessResponse(body: [
-                'data' => $tihs->resource::make($category),
+                'data' => $resourceClass::make($category),
                 'message' => trans($langPathName.'.create.success'),
             ]);
         } catch (Exception $exception) {
@@ -32,14 +32,14 @@ abstract class AbstractApiV1CRUDController extends AbstractApiController
         }
     }
 
-    final public function update(FormRequest $request, string|int $model, string $langPathName): JsonResponse
+    final public function update(FormRequest $request, string|int $model, string $langPathName, string $resourceClass): JsonResponse
     {
         try {
             $getModel = $this->service->update($request->validated(), $model);
-            /** @var JsonResource $tihs->resource */
+            /** @var JsonResource $resourceClass */
 
             return new SuccessResponse(body: [
-                'data' => $tihs->resource::make($getModel),
+                'data' => $resourceClass::make($getModel),
                 'message' => trans($langPathName.'.update.success', compact('langPathName')),
             ]);
         } catch (Exception $exception) {
@@ -49,7 +49,7 @@ abstract class AbstractApiV1CRUDController extends AbstractApiController
         }
     }
 
-    final public function delete(string|int $model, string $langPathName): JsonResponse
+    final public function delete(string|int $model, string $langPathName, string $resourceClass): JsonResponse
     {
         try {
             $this->service->delete($model);
@@ -64,12 +64,12 @@ abstract class AbstractApiV1CRUDController extends AbstractApiController
         }
     }
 
-    final public function list(FormRequest $filterData): JsonResponse
+    final public function list(FormRequest $filterData, string $resourceClass): JsonResponse
     {
         try {
             $collection = $this->service->list($filterData->validated());
-            /** @var JsonResource $tihs->resource */
-            $data['data'] = $tihs->resource::collection($collection);
+            /** @var JsonResource $resourceClass */
+            $data['data'] = $resourceClass::collection($collection);
 
             if ($collection instanceof LengthAwarePaginator) {
                 $data['pages'] = PaginatorMetaResource::make($collection);
@@ -83,14 +83,14 @@ abstract class AbstractApiV1CRUDController extends AbstractApiController
         }
     }
 
-    final public function view(string|int $model): JsonResponse
+    final public function view(string|int $model, string $resourceClass): JsonResponse
     {
         try {
             $getModel = $this->service->view($model);
 
-            /** @var JsonResource $tihs->resource */
+            /** @var JsonResource $resourceClass */
             return new SuccessResponse(body: [
-                'data' => $tihs->resource::make($getModel),
+                'data' => $resourceClass::make($getModel),
             ]);
         } catch (Exception $exception) {
             Log::error($exception->getMessage(), (array) $exception);

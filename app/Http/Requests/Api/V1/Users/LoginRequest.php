@@ -9,7 +9,8 @@ final class LoginRequest extends AbstractApiV1Request
     final public function rules(): array
     {
         return [
-
+            'email' => 'email|required',
+            'password' => 'string|required',
         ];
     }
 }

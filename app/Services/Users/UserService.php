@@ -9,6 +9,7 @@ use App\Services\CRUD\CRUDService;
 use App\Utils\Traits\Aliasable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 final class UserService extends CRUDService implements UserServiceInterface
 {
@@ -50,5 +51,12 @@ final class UserService extends CRUDService implements UserServiceInterface
         }
 
         return false;
+    }
+
+    public function create(array $data): User|Model
+    {
+        $data['password'] = Hash::make($data['password']);
+
+        return parent::create($data);
     }
 }

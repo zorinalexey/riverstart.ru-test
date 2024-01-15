@@ -23,8 +23,11 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $name = fake()->name();
+
         return [
             'name' => fake()->name(),
+            'alias' => Str::slug($name, config('crud-service')['alias_separator']),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),

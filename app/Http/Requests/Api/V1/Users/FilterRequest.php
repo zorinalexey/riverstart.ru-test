@@ -9,7 +9,8 @@ final class FilterRequest extends AbstractApiV1Request
     final public function rules(): array
     {
         return [
-
+            'sort' => 'array|nullable',
+            'name' => 'string|nullable',
         ];
     }
 }

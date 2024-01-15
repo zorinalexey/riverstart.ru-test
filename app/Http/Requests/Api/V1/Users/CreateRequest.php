@@ -9,7 +9,9 @@ final class CreateRequest extends AbstractApiV1Request
     final public function rules(): array
     {
         return [
-
+            'name' => 'string|required',
+            'email' => 'email|required',
+            'password' => 'string|required',
         ];
     }
 }

@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('products')->name('products.')->group(static function () {
 
+    Route::get('', ListController::class)->name('list');
     Route::post('', CreateController::class)->name('create');
-    Route::get('list', ListController::class)->name('list');
     Route::get('{product}', ViewController::class)->name('view');
     Route::put('{product}', UpdateController::class)->name('update');
     Route::delete('{product}', DeleteController::class)->name('delete');

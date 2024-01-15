@@ -36,7 +36,7 @@ final class ProductService extends CRUDService implements ProductServiceInterfac
     public function create(array $data): Product|Model
     {
         $this->setAlias($data, 'name');
-        $productCategoryIds = array_values(Arr::pull($data, 'categories'));
+        $productCategoryIds = array_values(Arr::pull($data, 'categories', []));
 
         if (count($productCategoryIds) < 2) {
             throw new self::$exception(
@@ -72,7 +72,7 @@ final class ProductService extends CRUDService implements ProductServiceInterfac
     public function update(array $data, int|string $product): Product|Model
     {
         $this->setAlias($data, 'name');
-        $productCategoryIds = array_values(Arr::pull($data, 'categories'));
+        $productCategoryIds = array_values(Arr::pull($data, 'categories', []));
 
         if (count($productCategoryIds) < 2) {
             throw new self::$exception(

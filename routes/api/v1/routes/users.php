@@ -13,8 +13,8 @@ Route::prefix('users')->name('users.')->group(static function () {
         Route::any('', LogoutController::class)->name('logout');
     });
 
+    Route::get('', ListController::class)->name('list');
     Route::post('', CreateController::class)->name('create');
-    Route::get('list', ListController::class)->name('list');
     Route::get('{user}', ViewController::class)->name('view');
     Route::put('{user}', UpdateController::class)->name('update');
     Route::delete('{user}', DeleteController::class)->name('delete');
