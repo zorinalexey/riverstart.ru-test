@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property BelongsToMany $products
  *
  * @method static Builder products()
+ * @method static Builder filter()
  */
 final class Category extends Model
 {

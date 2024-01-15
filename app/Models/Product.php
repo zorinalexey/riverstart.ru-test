@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property BelongsToMany $categories
  *
  * @method static Builder categories()
+ * @method static Builder filter()
  */
 final class Product extends Model
 {

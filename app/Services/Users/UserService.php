@@ -3,12 +3,15 @@
 namespace App\Services\Users;
 
 use App\Models\User;
+use App\Utils\Traits\Aliasable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 final class UserService implements UserServiceInterface
 {
+    use Aliasable;
+
     public function list(array $filterData): Collection|LengthAwarePaginator|null
     {
         // TODO: Implement list() method.
